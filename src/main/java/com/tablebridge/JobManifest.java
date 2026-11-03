@@ -1,0 +1,39 @@
+package com.tablebridge;
+
+import com.intellij.database.psi.DbElement;
+import com.intellij.database.util.*;
+import com.intellij.database.model.ObjectKind;
+import com.intellij.openapi.application.PathManager;
+import java.nio.file.*;
+import java.io.*;
+import java.util.*;
+
+/** Local recovery plan only: no passwords, row data or key cursors. */
+final class JobManifest {
+    static Path directory(){return Path.of(PathManager.getSystemPath(),"tablebridge","jobs");}
+    static String endpoint(DbElement ns){var ds=DbImplUtilCore.getLocalDataSource(ns);return ResumableTable.fingerprint(ds.getUniqueId()+"\0"+ds.getUrl()+"\0"+ds.getUsername()+"\0"+DbSelection.path(ns));}
+    static String fingerprint(TransferPlan plan){StringBuilder s=new StringBuilder(endpoint(plan.sourceNamespace)).append(endpoint(plan.targetNamespace)).append(plan.engine).append(plan.targetEngine);
+        for(int i=0;i<plan.items.size();i++){var item=plan.items.get(i);s.append('\0').append(ObjectIdentity.key(item.source())).append('\0').append(item.targetName()).append(item.action()).append(item.data()).append(item.manualStructure()).append(item.columns()).append(keys(plan,i));item.before().forEach(sql->s.append('\0').append(sql));item.after().forEach(sql->s.append('\0').append(sql));}return ResumableTable.fingerprint(s.toString());}
+    static List<String> keys(TransferPlan plan,int item){if(plan.checkpointKeys!=null)return plan.checkpointKeys.get(item);var pk=DasUtil.getPrimaryKey(plan.items.get(item).source());List<String> keys=new ArrayList<>();if(pk!=null)pk.getColumnsRef().names().forEach(keys::add);return List.copyOf(keys);}
+    static void freezeKeys(TransferPlan plan){if(plan.checkpointKeys==null){List<List<String>> keys=new ArrayList<>();for(int i=0;i<plan.items.size();i++)keys.add(keys(plan,i));plan.checkpointKeys=List.copyOf(keys);}for(int i=0;i<plan.items.size();i++)if(plan.items.get(i).data()&&(keys(plan,i).isEmpty()||!plan.items.get(i).columns().stream().map(TransferPlan.Column::name).toList().containsAll(keys(plan,i))))throw new IllegalArgumentException("断点/同步要求复制完整主键："+plan.items.get(i).source().getName());}
+    static Path save(Path directory,TransferPlan plan)throws IOException{
+        freezeKeys(plan);Properties p=new Properties();p.setProperty("version","1");p.setProperty("job",plan.jobId);p.setProperty("source",endpoint(plan.sourceNamespace));p.setProperty("target",endpoint(plan.targetNamespace));p.setProperty("engine",plan.engine.name());p.setProperty("targetEngine",plan.targetEngine.name());p.setProperty("fingerprint",fingerprint(plan));p.setProperty("verify",Boolean.toString(plan.verifyContent));p.setProperty("count",Integer.toString(plan.items.size()));
+        for(int i=0;i<plan.items.size();i++){var item=plan.items.get(i);String k="item."+i+".";p.setProperty(k+"source",item.source().getName());p.setProperty(k+"signature",ObjectIdentity.signature(item.source()));p.setProperty(k+"kind",item.source().getKind().toString());p.setProperty(k+"target",item.targetName());p.setProperty(k+"data",Boolean.toString(item.data()));p.setProperty(k+"manual",Boolean.toString(item.manualStructure()));p.setProperty(k+"policy",item.action().name());list(p,k+"before",item.before());list(p,k+"after",item.after());list(p,k+"keys",keys(plan,i));p.setProperty(k+"columns",Integer.toString(item.columns().size()));for(int c=0;c<item.columns().size();c++){var column=item.columns().get(c);String m=k+"column."+c+".";p.setProperty(m+"name",column.name());p.setProperty(m+"identity",Boolean.toString(column.identity()));p.setProperty(m+"type",Integer.toString(column.targetType()));}}
+        UUID.fromString(plan.jobId);Files.createDirectories(directory);Path file=directory.resolve(plan.jobId+".xml"),temp=Files.createTempFile(directory,".job-",".tmp");try{try(OutputStream out=Files.newOutputStream(temp)){p.storeToXML(out,"TableBridge recovery plan (no authentication data)","UTF-8");}if(Files.size(temp)>8*1024*1024)throw new IOException("恢复计划超过 8 MiB");try{Files.move(temp,file,StandardCopyOption.ATOMIC_MOVE,StandardCopyOption.REPLACE_EXISTING);}catch(AtomicMoveNotSupportedException e){Files.move(temp,file,StandardCopyOption.REPLACE_EXISTING);}return file;}finally{Files.deleteIfExists(temp);}
+    }
+    static TransferPlan load(Path file,DbElement source,DbElement target,List<DbElement> available)throws IOException{
+        if(Files.size(file)>8*1024*1024)throw new IOException("恢复计划超过 8 MiB");Properties p=new Properties();try(InputStream input=Files.newInputStream(file)){p.loadFromXML(input);}try{
+            if(!"1".equals(required(p,"version"))||!endpoint(source).equals(required(p,"source"))||!endpoint(target).equals(required(p,"target")))throw new IllegalArgumentException("恢复计划连接/模式与当前选择不匹配");
+            List<TransferPlan.Item> items=new ArrayList<>();List<List<String>> keys=new ArrayList<>();int count=count(p,"count",10000);if(count==0)throw new IllegalArgumentException("恢复计划没有对象");if(DbImplUtilCore.getLocalDataSource(target).isReadOnly())throw new IllegalArgumentException("目标连接为只读");for(int i=0;i<count;i++){String k="item."+i+".",name=required(p,k+"source"),kind=required(p,k+"kind");var matches=available.stream().filter(e->e.getName().equals(name)&&e.getKind().toString().equals(kind)&&ObjectIdentity.signature(e).equals(p.getProperty(k+"signature",""))).toList();if(matches.size()!=1)throw new IllegalArgumentException("恢复来源未加载或同名对象不唯一："+name);
+                String targetName=required(p,k+"target");DbSelection.engine(target).quote(targetName);List<TransferPlan.Column> columns=new ArrayList<>();for(int c=0;c<count(p,k+"columns",10000);c++){String m=k+"column."+c+".";columns.add(new TransferPlan.Column(required(p,m+"name"),flag(p,m+"identity"),Integer.parseInt(required(p,m+"type"))));}
+                List<String> before=readList(p,k+"before"),after=readList(p,k+"after");for(String sql:after)SqlNames.requireCreateOnly(sql);items.add(new TransferPlan.Item(matches.getFirst(),targetName,flag(p,k+"data"),before,after,columns,ExistingPolicy.valueOf(required(p,k+"policy")),flag(p,k+"manual")));keys.add(readList(p,k+"keys"));}
+            TransferPlan plan=new TransferPlan(source,target,Engine.valueOf(required(p,"engine")),Engine.valueOf(required(p,"targetEngine")),items,false,List.of("恢复任务：复用先前审核计划；已确认检查点不会重复，未确认 DDL 停止并提示。"));
+            if(plan.engine!=DbSelection.engine(source)||plan.targetEngine!=DbSelection.engine(target))throw new IllegalArgumentException("恢复数据库类型不一致");plan.jobId=required(p,"job");UUID.fromString(plan.jobId);plan.checkpointKeys=List.copyOf(keys);plan.recoverable=true;plan.resume=true;plan.verifyContent=flag(p,"verify");freezeKeys(plan);if(!fingerprint(plan).equals(required(p,"fingerprint")))throw new IllegalArgumentException("恢复计划内容被修改，不能重放");return plan;
+        }catch(IllegalArgumentException e){throw new IOException("恢复计划无效："+e.getMessage(),e);}
+    }
+    private static void list(Properties p,String key,List<String> values){p.setProperty(key+".count",Integer.toString(values.size()));for(int i=0;i<values.size();i++)p.setProperty(key+"."+i,values.get(i));}
+    private static List<String> readList(Properties p,String key){int count=count(p,key+".count",10000);List<String> list=new ArrayList<>();for(int i=0;i<count;i++)list.add(required(p,key+"."+i));return List.copyOf(list);}
+    private static int count(Properties p,String key,int max){int n=Integer.parseInt(required(p,key));if(n<0||n>max)throw new IllegalArgumentException("恢复条目数量无效");return n;}
+    private static boolean flag(Properties p,String key){String s=required(p,key);if(!Set.of("true","false").contains(s))throw new IllegalArgumentException("恢复标志无效");return Boolean.parseBoolean(s);}
+    private static String required(Properties p,String key){String v=p.getProperty(key);if(v==null||v.isBlank())throw new IllegalArgumentException("恢复字段缺失："+key);return v;}
+}

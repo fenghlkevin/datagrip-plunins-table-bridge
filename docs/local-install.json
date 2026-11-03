@@ -1,0 +1,14 @@
+{
+  "version": "0.3.3-alpha",
+  "pluginId": "com.tablebridge.copy",
+  "ide": "DataGrip 2026.2.6",
+  "idePath": "/Applications/DataGrip.app",
+  "build": "262.10968.148",
+  "path": "/Users/fengheliang/Library/Application Support/JetBrains/DataGrip2026.2/plugins/tablebridge",
+  "backup": "/Users/fengheliang/workbench/source/g20/DataGrip-Plugins/backups/local-install-20261010-101807",
+  "sha256": "757b051b8a8540d49c1fbe8ac41083b9670e0551159ebff9b41f22d623a57933",
+  "status": "installed and restarted; startup log confirms TableBridge 0.3.3-alpha loaded",
+  "logo": "installed SVG verified; plugin-manager visual check unavailable because settings UI did not open through automation",
+  "loadEvidence": "2026-10-10 10:19:43,592 AppStarter: Loaded custom plugins: TableBridge - Database Object Copy (0.3.3-alpha)",
+  "logoSha256": "73d094bbfa2830e3f63549cd62f978adddae9607fb08bf6f9e0e9eca2b28f5a4"
+}

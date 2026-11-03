@@ -1,0 +1,38 @@
+PASS native-model plans: serial dependency/rename, PG-to-MySQL DDL, append, clear, rebuild.
+
+-- 阶段一：处理对象并复制数据
+
+-- 注意：自动加入序列依赖：items_id_seq → items_copy_id_seq
+-- items_id_seq → items_copy_id_seq
+-- 目标处理：新建对象
+create sequence "public"."items_copy_id_seq"
+	maxvalue 9223372036854775807
+
+-- items → items_copy
+-- 目标处理：新建对象
+create table "public"."items_copy"
+(
+	id integer default nextval('"public"."items_copy_id_seq"'::regclass) not null
+)
+
+INSERT INTO "public"."items_copy" ("id") OVERRIDING SYSTEM VALUE SELECT "id" FROM "public"."items";
+-- 数据库内部复制，校验并提交
+
+-- 阶段二：全部记录复制后，创建后置索引与约束
+
+
+-- 阶段一：处理对象并复制数据
+
+-- 注意：跨类型转换：仅表/字段/主键/自增和记录；其他索引、唯一/检查约束、注释、排序规则和触发器不迁移。请审核字段映射与 SQL。
+-- 注意：id：integer → int（独立自增列）
+-- items → from_pg
+-- 目标处理：新建对象
+CREATE TABLE `target`.`from_pg` (
+  `id` int AUTO_INCREMENT NOT NULL,
+  INDEX (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+-- 分批复制记录（参数化写入），校验并提交
+
+-- 阶段二：全部记录复制后，创建后置索引与约束
+

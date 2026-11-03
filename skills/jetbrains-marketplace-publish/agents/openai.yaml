@@ -1,0 +1,4 @@
+interface:
+  display_name: "JetBrains Marketplace 上架"
+  short_description: "准备插件发布包、Logo、双语素材与操作视频，上传并核验商店结果"
+  default_prompt: "使用 $jetbrains-marketplace-publish 完成插件上架，包含 Logo、截图和操作视频，并报告审核与展示状态。"

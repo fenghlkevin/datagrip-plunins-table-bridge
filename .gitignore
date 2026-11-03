@@ -1,0 +1,11 @@
+build/
+dist/
+.idea/
+*.iml
+hs_err_pid*.log
+backups/
+__pycache__/
+*.py[cod]
+.DS_Store
+.env
+.env.*

@@ -1,0 +1,47 @@
+{
+  "version": "0.3.1-alpha",
+  "durationSeconds": 56,
+  "fps": 12,
+  "resolution": [
+    1280,
+    800
+  ],
+  "source": "Production plugin Swing UI captured in isolated DataGrip 2026.2 SDK, annotated sample-metadata preview; no database execution",
+  "chapters": [
+    {
+      "startSeconds": 0,
+      "title": "Copy. Paste. Review.",
+      "caption": "Copy objects in the database tree, then paste onto the destination."
+    },
+    {
+      "startSeconds": 8,
+      "title": "01  Confirm the destination",
+      "caption": "Confirm the source and destination using your DataGrip connections."
+    },
+    {
+      "startSeconds": 16,
+      "title": "02  Choose your objects",
+      "caption": "Select what to copy. Searching preserves your selected objects."
+    },
+    {
+      "startSeconds": 24,
+      "title": "03  Configure each object",
+      "caption": "Use Advanced to rename objects and choose structure, data, or both."
+    },
+    {
+      "startSeconds": 32,
+      "title": "04  Review full definitions",
+      "caption": "Review indexes, collations and triggers in the editable target definition."
+    },
+    {
+      "startSeconds": 40,
+      "title": "05  Check the transfer plan",
+      "caption": "Review objects, target names, copy content and conversion notes."
+    },
+    {
+      "startSeconds": 48,
+      "title": "06  Read the SQL before starting",
+      "caption": "Inspect the generated SQL. Confirm the plan before starting."
+    }
+  ]
+}

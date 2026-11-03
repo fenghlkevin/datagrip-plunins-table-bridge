@@ -1,0 +1,1 @@
+PASS production Swing panel: six groups, selected count, global data, per-object overrides, blank/duplicate validation, search persistence, keyboard item/group selection, change notifications, field dimensions.

@@ -1,0 +1,44 @@
+{
+  "version": "0.3.3-alpha",
+  "licenseUrl": "https://gist.github.com/fenghlkevin/7758c08f1d9eb3733a11b8e9f8c9cefd",
+  "zipSha256": "757b051b8a8540d49c1fbe8ac41083b9670e0551159ebff9b41f22d623a57933",
+  "sourcePublished": false,
+  "marketplaceStatus": "Upload Successful; Under review",
+  "pluginId": "com.tablebridge.copy",
+  "pluginName": "TableBridge - Database Object Copy",
+  "marketplaceUrl": "https://plugins.jetbrains.com/plugin/34687-tablebridge--database-object-copy",
+  "marketplaceId": 34687,
+  "screenshotsSaved": 9,
+  "videoStatus": "English UI and captions; public; linked to Marketplace",
+  "videoUrl": "https://www.youtube.com/watch?v=lTaVCPZRLLQ",
+  "videoVisibility": "public",
+  "history": [
+    {
+      "version": "0.3.0-alpha",
+      "zipSha256": "cb4073ad6cb1f676f02e2981cfe5c00e456ce6479674c74966c6f92a0c8cd8f5",
+      "videoUrl": "https://www.youtube.com/watch?v=qF1QTOyWvuc"
+    },
+    {
+      "version": "0.3.1-alpha",
+      "zipSha256": "cabe3e920cc65beb51b6120dd0c4b06ba481e364073ac94f887fa0cc852d8033",
+      "updateId": 1184886,
+      "marketplaceStatus": "Approved; verified 2026-10-10",
+      "verifier": "Compatible: IntelliJ IDEA 2026.2.3; 11 scheduled-removal API usages and 2 deprecated API usages"
+    }
+  ],
+  "chineseScreenshots": 4,
+  "englishScreenshots": 5,
+  "unpublishedDraft": "https://studio.youtube.com/video/Qo1LX6Oi_24/edit",
+  "draftCleanup": "awaiting user confirmation",
+  "updateId": 1190674,
+  "verifier": "No report available at upload confirmation",
+  "uploadedDate": "2026-10-10",
+  "channel": "stable",
+  "logo": {
+    "path": "META-INF/pluginIcon.svg",
+    "sha256": "73d094bbfa2830e3f63549cd62f978adddae9607fb08bf6f9e0e9eca2b28f5a4",
+    "packageVerified": true,
+    "publicDisplay": "awaiting review; not yet confirmed"
+  },
+  "updateUrl": "https://plugins.jetbrains.com/plugin/34687-tablebridge--database-object-copy/edit/versions/stable/1190674"
+}

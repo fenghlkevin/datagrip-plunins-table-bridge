@@ -1,0 +1,4 @@
+interface:
+  display_name: "JetBrains 插件本地安装"
+  short_description: "验证插件发布包与 IDE 兼容性，备份现有版本，安装并确认加载状态"
+  default_prompt: "使用 $jetbrains-local-install 为本机 IDE 安装插件，保留可恢复备份并确认版本与 Logo。"

@@ -1,0 +1,39 @@
+MYSQL
+create table source_schema.items
+(
+    id integer null
+)
+MAPPED: create table `target_schema`.`items_copy`
+(
+    id integer null
+)
+POSTGRES
+create table source_schema.items
+(
+    id integer
+)
+MAPPED: create table "target_schema"."items_copy"
+(
+    id integer
+)
+ORACLE
+create table "source_schema"."items"
+(
+    "id" integer
+)
+MAPPED: create table "target_schema"."items_copy"
+(
+    "id" integer
+)
+MSSQL
+create table source_schema.items
+(
+    id integer
+)
+MAPPED: create table [target_schema].[items_copy]
+(
+    id integer
+)
+PASS native DDL generation for four engines
+PASS native model transfer plans
+PASS production UI interactions and rendering

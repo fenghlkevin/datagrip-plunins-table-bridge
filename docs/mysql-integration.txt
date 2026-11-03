@@ -1,0 +1,1 @@
+PASS 13 real MySQL integration checks; disposable local MySQL 8.0.43. PostgreSQL endpoint not exercised.

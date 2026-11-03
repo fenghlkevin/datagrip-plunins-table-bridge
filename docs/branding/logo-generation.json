@@ -1,0 +1,8 @@
+{
+  "asset": "tablebridge-logo-v1.png",
+  "tool": "built-in image_gen",
+  "background": "white",
+  "concept": "Two databases connected by a bridge, with bidirectional transfer arrows",
+  "prompt": "Use case: logo-brand. Create a final professional logo icon for TableBridge, a database copy and migration developer tool. White solid background. One centered compact geometric emblem: two database cylinders, a cobalt blue cylinder on left and a teal cylinder on right, connected seamlessly by a bridge with one arch beneath the span. Two opposing arrow cutouts in the bridge span suggest bidirectional transfer. Cylinders each use just an elliptical top and two broad smooth tiers separated by simple clean white gaps. Crisp precise flat vector-style illustration with uniform pure flat fills, smooth clean mathematical edges. No texture, no distress, no noise, no scratches, no stippling, no shadows, no gradients, no 3D rendering. Restrained minimal shapes; clarity at small scale; generous white margin. Square canvas; emblem centered both horizontally and vertically occupying about 75 percent of canvas width. No text, no lettering, no watermark, no other objects, no mockup. Output single logo, not presentation board.",
+  "status": "Design asset; not yet embedded in the plugin or published to Marketplace"
+}

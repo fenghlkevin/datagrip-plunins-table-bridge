@@ -1,0 +1,14 @@
+<p><b>Copy database objects between DataGrip connections. Review the SQL, then transfer.</b></p>
+<p>TableBridge adds a familiar Copy → Paste workflow to the database tree. Select source objects, paste onto a destination database or schema, and use a three-step wizard to configure and review the transfer.</p>
+<ul>
+  <li><b>Tables and records:</b> copy structure and data, structure only, or records into an existing table.</li>
+  <li><b>Per-object control:</b> search, select, rename destinations, and review field mappings or complete destination definitions.</li>
+  <li><b>MySQL and PostgreSQL:</b> same-engine transfer and supported cross-engine conversions, with explicit conversion notes.</li>
+  <li><b>Database objects:</b> supported views, functions, procedures, sequences, and types; complex definitions use an editable review workflow.</li>
+  <li><b>Recovery and synchronization:</b> optional durable checkpoints, bounded retries, primary-key insert/update, and mirror delete.</li>
+  <li><b>Execution visibility:</b> SQL preview, dependency checks, destructive-operation confirmation, and exportable per-object results.</li>
+</ul>
+<p><b>Getting started:</b> refresh source/destination metadata; copy objects in the database tree with Ctrl+C (⌘C on macOS); select the destination database/schema and paste with Ctrl+V (⌘V); configure, review, and start.</p>
+<p><b>Compatibility:</b> DataGrip 2026.2 (262.*). The current version is 0.3.1-alpha. MySQL 8.0.43 and PostgreSQL 18.3 have isolated integration-test evidence. Oracle paths are experimental and have not passed real-database acceptance. SQL Server is outside this release's supported scope.</p>
+<p><b>Boundaries:</b> arbitrary dynamic SQL, complex collations, vendor-specific types, and ambiguous overloads are not promised to convert automatically. Checkpoint/sync mode requires matching complete primary keys and destination staging space; MySQL destinations require InnoDB. Existing triggers and constraints remain active. DDL can commit implicitly and failures may leave structures; this plugin is not a database backup tool.</p>
+<p>Database authentication stays with DataGrip. TableBridge does not add a password store or cloud transfer service. Review definitions and test with disposable data before important transfers.</p>

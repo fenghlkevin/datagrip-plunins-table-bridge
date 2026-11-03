@@ -1,0 +1,22 @@
+{
+  "artifact": "dist/tablebridge-0.3.2-alpha.zip",
+  "errors": [],
+  "warnings": [],
+  "logos": {
+    "META-INF/pluginIcon.svg": {
+      "sha256": "73d094bbfa2830e3f63549cd62f978adddae9607fb08bf6f9e0e9eca2b28f5a4",
+      "bytes": 666
+    }
+  },
+  "sha256": "9bc357b3f5989ba22e34a078bd7dd46ab857d65bdfcd8c1877c199a0e148ef75",
+  "mainJar": "tablebridge/lib/tablebridge.jar",
+  "id": "com.tablebridge.copy",
+  "name": "TableBridge - Database Object Copy",
+  "version": "0.3.2-alpha",
+  "vendor": "TableBridge",
+  "compatibility": {
+    "since-build": "262",
+    "until-build": "262.*"
+  },
+  "ok": true
+}

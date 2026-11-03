@@ -1,0 +1,18 @@
+TableBridge adds Copy → Paste for database objects in DataGrip 2026.2. This 56-second walkthrough shows destination selection, object selection, advanced configuration, full structure definitions, and SQL review.
+
+Marketplace (pending review): https://plugins.jetbrains.com/plugin/34687-tablebridge--database-object-copy
+License: https://gist.github.com/fenghlkevin/7758c08f1d9eb3733a11b8e9f8c9cefd
+
+This is an edited walkthrough of the actual plugin UI in an isolated DataGrip SDK environment, using sample metadata. It does not execute a database transfer. English prompts and Chinese captions are included; there is no audio.
+
+MySQL and PostgreSQL paths have isolated integration-test evidence. Oracle paths are experimental and have not passed real-database acceptance. SQL Server is outside this release's supported scope. Complex definitions may require manual SQL review.
+
+00:00 Copy and paste workflow
+00:08 Confirm destination
+00:16 Choose objects
+00:24 Advanced configuration
+00:32 Full structure definitions
+00:40 Review transfer plan
+00:48 Review SQL before starting
+
+TableBridge 为 DataGrip 提供数据库对象复制粘贴。此视频展示真实插件界面的配置和 SQL 审核，使用测试元数据，不执行数据库写入。
